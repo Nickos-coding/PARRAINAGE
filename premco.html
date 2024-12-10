@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification Première Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/premco.css"> <!-- Lien vers le fichier CSS -->
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Est-ce votre première fois sur ce site ?</h2>
+
+        <form action="traitement_premco.php" method="POST">
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="premiere_connexion" value="oui" required>
+                    Oui
+                </label>
+                <label>
+                    <input type="radio" name="premiere_connexion" value="non">
+                    Non
+                </label>
+            </div>
+
+            <button type="submit" class="btn-submit">Continuer</button>
+        </form>
+    </div>
+
+</body>
+</html>

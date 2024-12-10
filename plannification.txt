@@ -1,0 +1,259 @@
+__________Differentes page de notre site____________________
+
+--Page d'accueil principale
+
+--Page de premiere fois 
+
+
+1. Tableau de Bord Étudiant (Accueil de la page étudiant)
+Une fois connecté, chaque étudiant doit accéder à une interface claire et personnalisée qui contient les sections suivantes :
+
+A. Informations personnelles
+Un encart dédié qui affiche :
+Nom et prénom
+Filière et niveau (ex. Informatique, L1)
+Identifiant unique
+Contact et possibilité de le mettre à jour (numéro de téléphone, email professionnel)
+Bouton : "Modifier mes informations" pour éditer les champs modifiables (sauf l'identifiant).
+B. Accès à son Parrain ou Filleul
+Affichage dynamique des attributions :
+Si l’étudiant est filleul, afficher les informations de son parrain (nom, contact, email, niveau, filière).
+Si l’étudiant est parrain, afficher les informations de ses filleuls (liste déroulante s’il a plusieurs filleuls).
+Ajouter un bouton pour contacter directement son parrain ou filleul via email ou téléphone.
+C. Liste des rencontres (Suivi parrain/filleul)
+Une interface qui présente l’historique des rencontres documentées avec le parrain ou filleul.
+Champs à afficher :
+Date
+Lieu
+Heure de début et fin
+Description de l’activité
+Les étudiants peuvent :
+Ajouter un nouveau suivi via un formulaire.
+Consulter les suivis précédemment enregistrés.
+2. Suivi et Activités (UIYA Youth Impact et autres programmes)
+A. Formulaire de suivi des activités
+Les filleuls (ou chefs d’équipe PROPUS) doivent pouvoir renseigner un formulaire structuré pour suivre les activités des équipes parrainage :
+Date de l’activité
+Lieu de l’activité
+Description détaillée
+Type d’activité (exemple : mentorat, formation, rencontre).
+Une fois envoyé, les informations doivent être enregistrées dans la base de données et consultables.
+B. Gestion d’équipe PROPUS (Pour les chefs d’équipe)
+Section spécifique pour les étudiants L1 leaders de PROPUS :
+Gestion des équipes : visualiser la composition des groupes (parrainage L1-L2-L3).
+Suivi des membres de l’équipe : statistiques ou état d’avancement des activités.
+3. Affichage des listes publiques
+Une section pour consulter les listes des attributions globales de la filière (parrain-filleul) :
+Affichage organisé par filière et niveau (L1, L2, L3).
+Possibilité de télécharger ou imprimer la liste via un bouton (ex. format PDF).
+Cette fonctionnalité permet de renforcer la transparence et de rendre les informations accessibles à tous les participants.
+4. Fonctionnalités techniques supplémentaires
+A. Notifications et rappels
+Les étudiants devraient recevoir des notifications importantes, par exemple :
+"Rencontre programmée avec votre parrain le XX/XX/XXXX".
+"Soumettez votre fiche de suivi pour l’activité de mentorat avant XX/XX/XXXX".
+B. Sécurité et confidentialité
+Les informations sensibles (contacts, email) doivent être visibles uniquement par le parrain/filleul direct et non par d’autres étudiants.
+C. Interface utilisateur fluide
+Un design responsive pour s’adapter aux écrans mobiles.
+Utilisation de boutons et menus intuitifs pour naviguer facilement.
+Résumé des Actions que l’Étudiant peut Réaliser :
+Consulter ses informations personnelles (identifiant, contact, email).
+Modifier ses informations (sauf l’identifiant).
+Visualiser les informations de son parrain ou filleuls.
+Ajouter des suivis pour chaque rencontre.
+Consulter l’historique des rencontres documentées.
+Renseigner les activités PROPUS et suivre l’état des groupes (si applicable).
+Consulter et imprimer les listes publiques des attributions.
+----------------------------------------------
+<?php
+// Connexion à la base de données
+include 'connexion.php';
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Récupérer les données du formulaire
+    $filiere_parrain = $_POST['filiere_parrain'];
+    $niveau_parrain = $_POST['niveau_parrain'];
+    $niveau_filleul = $_POST['niveau_filleul'];
+
+    // Mettre à jour les étudiants pour leur attribuer les rôles de parrain et de filleul
+    // Attribuer 'parrain' aux étudiants du niveau parrain et de la filière sélectionnée
+    $stmt = $pdo->prepare("UPDATE etudiants SET type_parrainage = 'parrain' WHERE filiere_id = ? AND niveau_id = ?");
+    $stmt->execute([$filiere_parrain, $niveau_parrain]);
+
+    // Attribuer 'filleul' aux étudiants du niveau filleul et de la filière sélectionnée
+    $stmt = $pdo->prepare("UPDATE etudiants SET type_parrainage = 'filleul' WHERE filiere_id = ? AND niveau_id = ?");
+    $stmt->execute([$filiere_parrain, $niveau_filleul]);
+
+    // Récupérer les parrains et les filleuls avec les rôles attribués
+    $parrains = $pdo->query("SELECT * FROM etudiants WHERE type_parrainage = 'parrain' AND filiere_id = {$filiere_parrain} AND niveau_id = {$niveau_parrain}")->fetchAll(PDO::FETCH_ASSOC);
+    $filleuls = $pdo->query("SELECT * FROM etudiants WHERE type_parrainage = 'filleul' AND filiere_id = {$filiere_parrain} AND niveau_id = {$niveau_filleul}")->fetchAll(PDO::FETCH_ASSOC);
+
+    // Vérification que les deux listes ne sont pas vides
+    if (empty($parrains) || empty($filleuls)) {
+        die("Aucun parrain ou filleul disponible pour l'attribution.");
+    }
+
+    // Mélanger les listes
+    shuffle($parrains); // Mélange aléatoire des parrains
+    shuffle($filleuls); // Mélange aléatoire des filleuls
+
+    // Initialisation des relations
+    $relations = [];
+    $parrains_pour_second_tour = []; // Liste pour les parrains au second tour
+
+    // Attribution des parrains et des filleuls
+    while (!empty($filleuls)) {
+        foreach ($parrains as $parrain) {
+            if (empty($filleuls)) break;
+
+            // Attribuer un filleul à un parrain
+            $filleul = array_shift($filleuls); // Prendre le premier filleul
+            $relations[] = [
+                'parrain_id' => $parrain['idetu'],
+                'filleul_id' => $filleul['idetu']
+            ];
+
+            // Ajouter le parrain pour le tour suivant si nécessaire
+            $parrains_pour_second_tour[] = $parrain;
+        }
+
+        // Si des filleuls n'ont pas été assignés, on recommence avec un mélange des parrains
+        if (!empty($filleuls)) {
+            shuffle($parrains_pour_second_tour);
+            $parrains = $parrains_pour_second_tour;
+            $parrains_pour_second_tour = [];
+        }
+    }
+
+    // Sauvegarder les relations dans la base de données
+    $stmt = $pdo->prepare("INSERT INTO parrainages (parrain_id, filleul_id) VALUES (:parrain_id, :filleul_id)");
+
+    foreach ($relations as $relation) {
+        $stmt->execute([
+            ':parrain_id' => $relation['parrain_id'],
+            ':filleul_id' => $relation['filleul_id']
+        ]);
+    }
+
+    // Réinitialiser les rôles des étudiants à NULL après attribution
+    $pdo->query("UPDATE etudiants SET type_parrainage = NULL");
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats du Parrainage</title>
+    <link rel="stylesheet" href="css/parrainage.css"> <!-- Lien vers le fichier CSS -->
+</head>
+<body>
+
+    <div class="container">
+        <h1>Attribution des Parrains et Filleuls</h1>
+
+        <?php if ($_SERVER['REQUEST_METHOD'] === 'POST') { ?>
+            <p>Les relations de parrainage ont été attribuées avec succès !</p>
+            
+            <!-- Tableau des Parrains et Filleuls -->
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Parrain</th>
+                        <th>Filleul</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($relations as $relation) {
+                        // Récupérer les informations sur les parrains et filleuls
+                        $parrain = $pdo->query("SELECT * FROM etudiants WHERE idetu = {$relation['parrain_id']}")->fetch(PDO::FETCH_ASSOC);
+                        $filleul = $pdo->query("SELECT * FROM etudiants WHERE idetu = {$relation['filleul_id']}")->fetch(PDO::FETCH_ASSOC);
+                    ?>
+                        <tr>
+                            <td><?= $parrain['nom'] . ' ' . $parrain['prenom'] ?></td>
+                            <td><?= $filleul['nom'] . ' ' . $filleul['prenom'] ?></td>
+                            <td>
+                                <!-- Options pour rechercher, valider et imprimer -->
+                                <button onclick="window.print()">Imprimer</button>
+                                <button onclick="rechercher('<?= $parrain['nom'] ?>', '<?= $filleul['nom'] ?>')">Rechercher</button>
+                                <button>Valider</button>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } ?>
+    </div>
+
+    <script>
+        // Fonction pour rechercher un parrain ou un filleul
+        function rechercher(parrain, filleul) {
+            alert("Recherche pour : " + parrain + " (Parrain) et " + filleul + " (Filleul)");
+        }
+    </script>
+
+</body>
+</html>
+-----------------------------------------
+/* Style général de la page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+button {
+    padding: 8px 15px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+@media print {
+    button {
+        display: none;
+    }
+}

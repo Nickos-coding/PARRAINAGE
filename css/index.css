@@ -1,0 +1,193 @@
+/* Définition de la police */
+    body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('../image/arr.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    color: #333;
+}
+
+/* Global styles */
+header {
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    width: 3px;
+    height: 3px;
+
+}
+
+header .logo img{
+    height: 70px;
+    margin-right: 15px;
+}
+
+
+
+header .nav-links ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+header .nav-links ul li {
+    margin-left: 20px;
+}
+
+header .nav-links ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 400;
+    padding: 10px;
+    display: block;
+    position: relative;
+}
+
+header .nav-links ul li a.active,
+header .nav-links ul li a:hover {
+    background-color: #9c2323; /* Rouge */
+    border-radius: 5px;
+}
+
+header .hamburger-menu {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 25px;
+    width: 30px;
+}
+
+header .hamburger-menu .bar {
+    background-color: white;
+    height: 5px;
+    width: 100%;
+}
+
+header .login .login-btn {
+    background-color: #d9534f;/* Rouge */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+header .login .login-btn:hover{
+    background-color: transparent;
+}
+
+header .login .profile-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+header .login .profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Section principale */
+main {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+main .welcome-message h1 {
+    color: #1a1a2e;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+main .welcome-message p {
+    font-size: 18px;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.content {
+    text-align: center;
+    margin: 50px 20px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent pour plus de contraste */
+    border-radius: 10px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.welcome-text {
+    font-size: 2rem;  /* Taille du texte agrandie */
+    font-weight: bold;
+    margin-bottom: 30px;
+    animation: slideIn 1.5s ease-out;
+    color: #ffffff;
+}
+
+/* Contenus cachés par défaut */
+.content-section {
+    display: none;
+    margin-top: 20px;
+}
+
+footer {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+    header .nav-links ul {
+        display: none;
+    }
+
+    header .hamburger-menu {
+        display: flex;
+    }
+
+    header .nav-links ul {
+        flex-direction: column;
+        background-color: #1a1a2e;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 0;
+        display: none;
+    }
+
+    header .nav-links ul li {
+        margin: 10px 0;
+    }
+
+    main .welcome-message h1 {
+        font-size: 28px;
+    }
+
+    main .welcome-message p {
+        font-size: 16px;
+    }
+}
