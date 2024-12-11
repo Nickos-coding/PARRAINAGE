@@ -1,59 +1,105 @@
-
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Étudiant</title>
-    <link rel="stylesheet" href="css/page_etudiant.css">
+    <!-- Fichier CSS pour le style -->
+    <link rel="stylesheet" href="./css/page_etudiant.css">
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="header-content">
-            <div class="logo">UIYA SYSTEM</div>
-            <div class="profile-circle">
-                <img src="uploads/<?= htmlspecialchars($etudiant['photo_profil']); ?>" alt="Photo de Profil">
-            </div>
+        <div class="logo">
+            <!-- Logo du site -->
+            <img src="logo.png" alt="Logo du site">
+        </div>
+        <nav>
+            <ul>
+                <!-- Liens de navigation -->
+                <li><a href="#notifications">Notifications</a></li>
+                <li>
+                    <a href="#">Rencontres</a>
+                    <!-- Sous-menu pour les options liées aux rencontres -->
+                    <ul class="submenu">
+                        <li><a href="#remplir-formulaire">Remplir un formulaire</a></li>
+                        <li><a href="#rencontres-passees">Rencontres passées</a></li>
+                        <li><a href="#demandes">Demandes en attente</a></li>
+                    </ul>
+                </li>
+                <li><a href="#activites">Activités</a></li>
+                <li><a href="#logout">Déconnexion</a></li>
+            </ul>
+        </nav>
+        <div class="avatar">
+            <!-- Avatar ou photo de l'étudiant -->
+            <img src="avatar.png" alt="Avatar étudiant">
         </div>
     </header>
 
-    <!-- Contenu Principal -->
+    <!-- Main Content -->
     <main>
-        <section class="welcome-section">
-            <h1>Bienvenue, <?= htmlspecialchars($etudiant['prenom'] . ' ' . $etudiant['nom']); ?> !</h1>
-            <p>Découvrez vos informations personnelles, vos parrains ou filleuls, et bien plus encore.</p>
+        <!-- Notifications Section -->
+        <section id="notifications">
+            <h2>Notifications</h2>
+            <!-- Une notification avec des actions disponibles -->
+            <div class="notification">
+                <p>Nouvelle demande de rencontre de [Nom].</p>
+                <button>Accepter</button>
+                <button>Refuser</button>
+            </div>
         </section>
 
-        <section class="infos-section">
-            <h2>Vos Informations</h2>
-            <ul>
-                <li><strong>Identifiant :</strong> <?= htmlspecialchars($etudiant['id']); ?></li>
-                <li><strong>Email :</strong> <?= htmlspecialchars($etudiant['email']); ?></li>
-                <li><strong>Contact :</strong> <?= htmlspecialchars($etudiant['contact']); ?></li>
-                <li><strong>Filière :</strong> <?= htmlspecialchars($etudiant['filiere']); ?></li>
-                <li><strong>Niveau :</strong> <?= htmlspecialchars($etudiant['niveau']); ?></li>
-            </ul>
-            <a href="modifier_infos.php" class="btn-modifier">Modifier Mes Informations</a>
+        <!-- Rencontres Section -->
+        <section id="rencontres">
+            <h2>Rencontres</h2>
+            <!-- Formulaire pour créer une nouvelle rencontre -->
+            <div id="remplir-formulaire">
+                <h3>Remplir un formulaire</h3>
+                <form action="process_rencontre.php" method="POST">
+                    <!-- Champ pour indiquer le destinataire -->
+                    <label for="destinataire">Destinataire :</label>
+                    <input type="text" id="destinataire" name="destinataire" required>
+
+                    <!-- Champ pour ajouter des détails sur la rencontre -->
+                    <label for="details">Détails :</label>
+                    <textarea id="details" name="details" required></textarea>
+
+                    <button type="submit">Envoyer</button>
+                </form>
+            </div>
+
+            <!-- Liste des rencontres passées -->
+            <div id="rencontres-passees">
+                <h3>Rencontres passées</h3>
+                <ul>
+                    <li>Rencontre avec [Nom] le [Date] à [Lieu]</li>
+                </ul>
+            </div>
+
+            <!-- Liste des demandes en attente -->
+            <div id="demandes">
+                <h3>Demandes en attente</h3>
+                <ul>
+                    <li>Demande de [Nom] - En attente</li>
+                </ul>
+            </div>
         </section>
 
-        <section class="parrainage-section">
-            <h2>Votre Parrainage</h2>
-            <p>Consultez vos parrains ou filleuls ci-dessous.</p>
-            <ul>
-                <!-- Exemple dynamique -->
-                <li><strong>Parrain :</strong> Nom et Prénom du Parrain</li>
-                <li><strong>Filleul :</strong> Nom et Prénom du Filleul</li>
-            </ul>
+        <!-- Activités Section -->
+        <section id="activites">
+            <h2>Activités</h2>
+            <!-- Formulaire pour enregistrer une activité -->
+            <form action="process_activite.php" method="POST">
+                <label for="activite">Activité :</label>
+                <textarea id="activite" name="activite" required></textarea>
+
+                <button type="submit">Enregistrer</button>
+            </form>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 UIYA System - Tous droits réservés.</p>
-    </footer>
-
-    <!-- Script JS -->
-    <script src="js/page_etudiant.js"></script>
+    <!-- Fichier JavaScript pour les interactions -->
+    <script src="./js/page_etudiant.js"></script>
 </body>
 </html>

@@ -60,6 +60,7 @@ try {
                         <li><a href="#" class="menu-link" data-section="form-filiere">Filière</a></li>
                         <li><a href="#" class="menu-link" data-section="form-niveau">Niveau</a></li>
                         <li><a href="#" class="menu-link" data-section="form-etudiant">Étudiant</a></li>
+                        <li><a href="#" class="menu-link" data-section="form-sous-admin">Sous-administrateur</a></li>
                     </ul>
                 </li>
                 <li><a href="listes.php">Listes</a></li>
@@ -88,6 +89,16 @@ try {
         <!-- Section Accueil -->
         <div id="accueil" class="content-section">
            
+        </div>
+
+
+        <!-- Formulaire Sous-admin -->
+        <div id="form-sous-admin" class="content-section hidden">
+            <h2>Ajouter un Sous-admin</h2>
+            <form action="ajouter_sous-admin.php" method="POST">
+                <input type="text" name="identifiant" placeholder="Identifiant Sous-admin" required>
+                <button type="submit">Ajouter</button>
+            </form>
         </div>
 
         <!-- Formulaire Filière -->

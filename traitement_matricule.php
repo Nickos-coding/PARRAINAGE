@@ -4,24 +4,43 @@ session_start();
 require('connexion.php');  // Remplace par ton fichier de connexion à la DB
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Récupération du matricule
+    // Récupération du matricule saisi par l'utilisateur
     $matricule = $_POST['matricule'];
 
-    // Vérifier si le matricule existe dans la base de données
-    $sql = "SELECT * FROM etudiants WHERE matricule = :matricule";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':matricule', $matricule);
-    $stmt->execute();
+    try {
+        // Vérification dans la table des étudiants
+        $sqlEtudiant = "SELECT * FROM etudiants WHERE matricule = :matricule";
+        $stmtEtudiant = $pdo->prepare($sqlEtudiant);
+        $stmtEtudiant->bindParam(':matricule', $matricule);
+        $stmtEtudiant->execute();
 
-    $etudiant = $stmt->fetch();
+        $etudiant = $stmtEtudiant->fetch();
 
-    if ($etudiant) {
-        // Si le matricule existe, rediriger vers le formulaire pour entrer l'email et le mot de passe
-        header('Location: formulaire_email_mdp.php?matricule=' . $matricule);  // Passer le matricule via l'URL
-        exit;
-    } else {
-        // Si le matricule n'existe pas, afficher un message d'erreur
-        echo "Matricule non trouvé. Veuillez vérifier et réessayer.";
+        if ($etudiant) {
+            // Si le matricule est trouvé dans la table des étudiants
+            header('Location: formulaire_email_mdp.php?matricule=' . $matricule);
+            exit;
+        } else {
+            // Si le matricule n'est pas trouvé, vérifier dans la table utilisateurs
+            $sqlUtilisateur = "SELECT * FROM utilisateurs WHERE identifiant = :matricule";
+            $stmtUtilisateur = $pdo->prepare($sqlUtilisateur);
+            $stmtUtilisateur->bindParam(':matricule', $matricule);
+            $stmtUtilisateur->execute();
+
+            $utilisateur = $stmtUtilisateur->fetch();
+
+            if ($utilisateur) {
+                // Si le matricule est trouvé dans la table des utilisateur
+                header('Location: formulaire_email_mdp.php?matricule=' . $matricule);
+                exit;
+            } else {
+                // Si le matricule est introuvable dans les deux tables
+                echo "Matricule introuvable dans les bases de données.";
+            }
+        }
+    } catch (PDOException $e) {
+        // Gestion des erreurs de la base de données
+        echo "Erreur de base de données : " . $e->getMessage();
     }
 }
 ?>

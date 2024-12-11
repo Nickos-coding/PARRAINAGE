@@ -19,7 +19,7 @@
         <div class="form-container">
             <h2>Première connexion</h2>
             <form action="traitement_matricule.php" method="POST">
-                <label for="matricule">Matricule :</label>
+                <label for="matricule">Identifiant :</label>
                 <input type="text" id="matricule" name="matricule" required>
                 
                 <button type="submit">Valider</button>
