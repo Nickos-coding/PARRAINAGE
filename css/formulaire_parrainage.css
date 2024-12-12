@@ -13,7 +13,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #4CAF50;
+    color: #2cd3bd;
     margin-bottom: 30px;
 }
 
@@ -49,7 +49,7 @@ select {
 button {
     padding: 12px;
     font-size: 16px;
-    background-color: #4CAF50;
+    background-color: #2cd3bd;
     color: white;
     border: none;
     border-radius: 5px;
@@ -57,7 +57,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #2cd3bd;
 }
 
 /* Responsive Design */

@@ -47,7 +47,7 @@ try {
     <header>
         <!-- Logo -->
         <div class="logo">
-            <img src="image/UIYA.png" alt=""> <!-- Remplacement du logo par le texte -->
+            <img src="./image/UIYA.png" alt=""> <!-- Remplacement du logo par le texte -->
         </div>
 
         <!-- Navigation -->
@@ -57,18 +57,15 @@ try {
                 <li class="dropdown">
                     <a href="#">Ajouter</a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" class="menu-link" data-section="form-filiere">Filière</a></li>
-                        <li><a href="#" class="menu-link" data-section="form-niveau">Niveau</a></li>
                         <li><a href="#" class="menu-link" data-section="form-etudiant">Étudiant</a></li>
-                        <li><a href="#" class="menu-link" data-section="form-sous-admin">Sous-administrateur</a></li>
                     </ul>
                 </li>
-                <li><a href="listes.php">Listes</a></li>
+                <li><a href="listes3.php">Listes</a></li>
                 <li class="dropdown">
                     <a href="#">Parrainage</a>
                     <ul class="dropdown-menu">
                         <li><a href="#" class="menu-link" data-section="voir-parrainages">Voir les parrainages</a></li>
-                        <li><a href="formulaire_parrainage.php">Créer une liste de parrainage</a></li>
+                        <li><a href="formulaire_parrainageANG.php">Créer une liste de parrainage</a></li>
                     </ul>
                 </li>
                 <li><a href="#">Statistiques</a></li> <!-- Menu Activités -->
@@ -89,35 +86,6 @@ try {
         <!-- Section Accueil -->
         <div id="accueil" class="content-section">
            
-        </div>
-
-
-        <!-- Formulaire Sous-admin -->
-        <div id="form-sous-admin" class="content-section hidden">
-            <h2>Ajouter un Sous-admin</h2>
-            <form action="ajouter_sous-admin.php" method="POST">
-                <input type="text" name="identifiant" placeholder="Identifiant Sous-admin" required>
-                <input type="text" name="respo" placeholder="Responsabilite" required>
-                <button type="submit">Ajouter</button>
-            </form>
-        </div>
-
-        <!-- Formulaire Filière -->
-        <div id="form-filiere" class="content-section hidden">
-            <h2>Ajouter une Filière</h2>
-            <form action="ajouter_filiere.php" method="POST">
-                <input type="text" name="nom_filiere" placeholder="Nom de la Filière" required>
-                <button type="submit">Ajouter</button>
-            </form>
-        </div>
-
-        <!-- Formulaire Niveau -->
-        <div id="form-niveau" class="content-section hidden">
-            <h2>Ajouter un Niveau</h2>
-            <form action="ajouter_niveau.php" method="POST">
-                <input type="text" name="nom_niveau" placeholder="Nom du Niveau" required>
-                <button type="submit">Ajouter</button>
-            </form>
         </div>
 
         <!-- Formulaire Étudiant -->
@@ -145,10 +113,9 @@ try {
                 <!-- Sélection dynamique de la filière -->
                 <label for="filiere">Filière :</label>
                 <select id="filiere" name="filiere" required>
-                    <option value="">Choisir une filière</option>
                     <?php
                     require_once 'connexion.php';
-                    $filieres = $pdo->query("SELECT * FROM filieres")->fetchAll();
+                    $filieres = $pdo->query("SELECT * FROM filieres where idfil = 3")->fetchAll();
                     foreach ($filieres as $filiere) {
                         echo "<option value='{$filiere['idfil']}'>{$filiere['nom_filiere']}</option>";
                     }
@@ -168,20 +135,19 @@ try {
                 </select><br><br>
 
                 <!-- Bouton d'ajout -->
-                <button type="submit" name="ajouter_etudiant">Ajouter l'étudiant</button>
+                <button type="submit" name="ajouter_etudiant" onclick="valider()">Ajouter l'étudiant</button>
             </form>
         </div>
 
         <!-- Voir les parrainages -->
         <div id="voir-parrainages" class="content-section hidden">
             <h2>Liste des Parrainages</h2>
-            <form method="GET" action="voir_parrainages.php">
+            <form method="GET" action="voir_parrainageANG.php">
                 <label for="filiere-select">Filière :</label>
                 <select id="filiere-select" name="filiere" required>
-                    <option value="">Choisir une filière</option>
                     <?php
                     require_once 'connexion.php';
-                    $filieres = $pdo->query("SELECT * FROM filieres")->fetchAll();
+                    $filieres = $pdo->query("SELECT * FROM filieres where idfil = 3")->fetchAll();
                     foreach ($filieres as $filiere) {
                         echo "<option value='{$filiere['idfil']}'>{$filiere['nom_filiere']}</option>";
                     }

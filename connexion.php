@@ -9,14 +9,12 @@ $dbname = 'parrainage_db';  // Nom de la base de données
 $username = 'root';  // Nom d'utilisateur de la base de données
 $password = '';  // Mot de passe de la base de données
 
-try {
-    // Vérifie si une connexion PDO n'est pas déjà en cours
-    if (!isset($pdo)) {
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-} catch (PDOException $e) {
-    // Désactiver les messages détaillés en production
-    error_log("Erreur de connexion à la base de données : " . $e->getMessage());
+// Créer une connexion MySQLi
+$conn = new mysqli($host, $username, $password, $dbname);
+
+// Vérifier la connexion
+if ($conn->connect_error) {
+    error_log("Erreur de connexion à la base de données : " . $conn->connect_error);
     die("Une erreur est survenue. Veuillez réessayer plus tard.");
 }
+?>

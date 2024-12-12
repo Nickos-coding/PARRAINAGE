@@ -33,3 +33,6 @@ function showSection(event) {
 menuLinks.forEach((link) => {
   link.addEventListener("click", showSection);
 });
+function valider() {
+    alert("ETUDIANTS AJOUTES AVEC SUCCES.");
+}

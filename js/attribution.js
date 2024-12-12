@@ -17,6 +17,6 @@ function searchTable() {
             }
         }
 
-        function validerParrainage() {
-            alert("Les relations de parrainage ont été validées.");
-        }
+function validerParrainage() {
+    alert("Les relations de parrainage ont été validées.");
+}

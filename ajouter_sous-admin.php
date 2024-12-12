@@ -8,11 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['identifiant']) && !empty(trim($_POST['identifiant']))) {
         // Sécuriser les données
         $identifiant = trim($_POST['identifiant']);
+        $respo = trim($_POST['respo']);
 
         try {
             // Préparer la requête d'insertion
-            $query = $pdo->prepare("INSERT INTO utilisateurs (identifiant) VALUES (:identifiant)");
+            $query = $pdo->prepare("INSERT INTO utilisateurs (identifiant,respo) VALUES (:identifiant,:respo)");
             $query->bindParam(':identifiant', $identifiant, PDO::PARAM_STR);
+            $query->bindParam(':respo', $respo, PDO::PARAM_STR);
 
             // Exécuter la requête
             if ($query->execute()) {
